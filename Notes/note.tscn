@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://d4nl8dkym8knh"]
+
+[ext_resource type="Script" uid="uid://dptsa0ifw2nyj" path="res://Notes/note.gd" id="1_w4jvc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pctds"]
+bg_color = Color(0.12, 0.12, 0.12, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wuouw"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+border_width_left = 12
+border_width_top = 12
+border_width_right = 12
+border_width_bottom = 12
+border_color = Color(0.231373, 0.231373, 0.231373, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="Theme" id="Theme_wuouw"]
+Button/styles/focus = SubResource("StyleBoxFlat_pctds")
+Button/styles/hover = SubResource("StyleBoxFlat_wuouw")
+Button/styles/normal = SubResource("StyleBoxFlat_wuouw")
+Button/styles/pressed = SubResource("StyleBoxFlat_wuouw")
+
+[node name="Note" type="Button" node_paths=PackedStringArray("double_click_timer")]
+offset_right = 320.0
+offset_bottom = 128.0
+focus_mode = 1
+theme = SubResource("Theme_wuouw")
+script = ExtResource("1_w4jvc")
+double_click_timer = NodePath("DoubleClickTimer")
+
+[node name="DoubleClickTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]
