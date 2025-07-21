@@ -1,46 +1,53 @@
 [gd_scene load_steps=5 format=3 uid="uid://d4nl8dkym8knh"]
 
 [ext_resource type="Script" uid="uid://dptsa0ifw2nyj" path="res://Notes/note.gd" id="1_w4jvc"]
+[ext_resource type="Texture2D" uid="uid://c8ga4f7p6ffqb" path="res://icon.svg" id="2_gaf6w"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pctds"]
-bg_color = Color(0.12, 0.12, 0.12, 0)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gaf6w"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+anti_aliasing_size = 3.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wuouw"]
-bg_color = Color(0.117647, 0.117647, 0.117647, 1)
-border_width_left = 12
-border_width_top = 12
-border_width_right = 12
-border_width_bottom = 12
-border_color = Color(0.231373, 0.231373, 0.231373, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gaf6w"]
 
-[sub_resource type="Theme" id="Theme_wuouw"]
-Button/styles/focus = SubResource("StyleBoxFlat_pctds")
-Button/styles/hover = SubResource("StyleBoxFlat_wuouw")
-Button/styles/normal = SubResource("StyleBoxFlat_wuouw")
-Button/styles/pressed = SubResource("StyleBoxFlat_wuouw")
-
-[node name="Note" type="Button" node_paths=PackedStringArray("double_click_timer")]
-offset_right = 320.0
-offset_bottom = 128.0
-focus_mode = 1
-theme = SubResource("Theme_wuouw")
+[node name="Note" type="Node2D" node_paths=PackedStringArray("double_click_timer", "selected_pannel")]
 script = ExtResource("1_w4jvc")
 double_click_timer = NodePath("DoubleClickTimer")
+selected_pannel = NodePath("Selected")
 
 [node name="DoubleClickTimer" type="Timer" parent="."]
 one_shot = true
 
-[connection signal="button_down" from="." to="." method="_on_button_down"]
-[connection signal="button_up" from="." to="." method="_on_button_up"]
+[node name="Bg" type="Sprite2D" parent="."]
+texture = ExtResource("2_gaf6w")
+
+[node name="Selected" type="Panel" parent="."]
+visible = false
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gaf6w")
+
+[node name="Button" type="Button" parent="."]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_gaf6w")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gaf6w")
+
+[connection signal="button_down" from="Button" to="." method="_on_pressed"]
+[connection signal="button_up" from="Button" to="." method="_on_relessed"]

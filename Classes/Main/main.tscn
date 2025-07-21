@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bl4oagua0rtsx"]
+[gd_scene load_steps=9 format=3 uid="uid://bl4oagua0rtsx"]
 
 [ext_resource type="Texture2D" uid="uid://4d17hwyqpb8b" path="res://Classes/Grid/grid_texture.png" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ca81alnf1rk0c" path="res://Classes/camera.gd" id="1_ig7tw"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://dldy4txjsnobs" path="res://Notes/notes_main.gd" id="5_1bc4a"]
 [ext_resource type="Texture2D" uid="uid://c8ga4f7p6ffqb" path="res://icon.svg" id="6_jiyd6"]
 [ext_resource type="PackedScene" uid="uid://d4nl8dkym8knh" path="res://Notes/note.tscn" id="6_pctds"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pctds"]
 
 [node name="Main" type="Node" node_paths=PackedStringArray("camera", "grid", "notes")]
 script = ExtResource("1_lquwl")
@@ -26,34 +28,60 @@ main = NodePath("..")
 scale = Vector2(2, 2)
 script = ExtResource("2_1bvp3")
 main = NodePath("..")
-cell_size = 64.0
+cell_size = 32.0
 
 [node name="Grid" type="Sprite2D" parent="Grid"]
-position = Vector2(1024, 1024)
+position = Vector2(512, 512)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_1bvp3")
 
 [node name="Grid2" type="Sprite2D" parent="Grid"]
-position = Vector2(1024, -1024)
+position = Vector2(512, -512)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_1bvp3")
 
 [node name="Grid3" type="Sprite2D" parent="Grid"]
-position = Vector2(-1024, 1024)
+position = Vector2(-512, 512)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_1bvp3")
 
 [node name="Grid4" type="Sprite2D" parent="Grid"]
-position = Vector2(-1024, -1024)
+position = Vector2(-512, -512)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_1bvp3")
+
+[node name="Collision" type="Button" parent="Grid"]
+visible = false
+offset_left = -1737.0
+offset_top = -2551.0
+offset_right = 2359.0
+offset_bottom = 1545.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_pctds")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_pctds")
 
 [node name="NotesMain" type="Node2D" parent="." node_paths=PackedStringArray("main")]
 script = ExtResource("5_1bc4a")
 main = NodePath("..")
 
 [node name="Note" parent="NotesMain" instance=ExtResource("6_pctds")]
+position = Vector2(-256, 0)
 
 [node name="Note2" parent="NotesMain" instance=ExtResource("6_pctds")]
 
 [node name="Note3" parent="NotesMain" instance=ExtResource("6_pctds")]
+position = Vector2(256, 0)
 
 [node name="Icon" type="Sprite2D" parent="."]
 visible = false
 texture = ExtResource("6_jiyd6")
+
+[connection signal="button_up" from="Grid/Collision" to="NotesMain" method="_on_collision_button_up"]

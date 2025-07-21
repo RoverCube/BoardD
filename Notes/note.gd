@@ -1,54 +1,60 @@
-extends Button
+extends Node2D
 class_name Note
 
 var main: Main
+var notes_main: NotesMain
+
 var selected: bool = false
-var dragging: bool = false
+var selection_moviment_threshold: float = 8.0 # squared
+
+var pressed: bool = false
+var m_motion: bool = false
 @export var double_click_timer: Timer
-
-
-func deselect_other():
-	for x in main.notes.get_children():
-		if x is Note and x != self:
-			x.selected = false
+@export var selected_pannel: Panel
 
 func select():
+	deselect_all()
+
 	selected = true
-	rotation = 0.2
+	selected_pannel.show()
+ 
 func deselect():
 	selected = false
-	rotation = 0
-
-
-func _on_button_down() -> void:
-	
-	if Input.is_action_pressed("shift_select"):
-		select()
-	else:
-		deselect()
-	
-	dragging = true
-	
-	# Double Click
-	if not double_click_timer.is_stopped(): 
-		double_click()
-		double_click_timer.stop()
-	else:
-		double_click_timer.start(main.double_click_cooldown)
-
-
-func _on_button_up() -> void:
-	dragging = false
-	# Snap position
-	position = snapped(position, Vector2(main.grid.cell_size, main.grid.cell_size))
-
-func _input(event: InputEvent) -> void:
-	if dragging == false: return
-	
-	for x in main.notes.get_children():
-		if x is Note:
-			if event is InputEventMouseMotion and x.selected == true:
-				position += event.relative / main.camera.zoom.x
+	selected_pannel.hide()
+func deselect_all():
+	for x in notes_main.notes:
+		x.deselect()
 
 func double_click() -> void:
 	print("asdas")
+
+
+func _on_pressed() -> void:
+	pressed = true # starts grabbing
+	print("a")
+
+func _on_relessed() -> void:
+	pressed = false # stops grabbing
+	if m_motion == true: 
+		m_motion = false # Stops moving
+		position = snapped(position, Vector2(main.grid.cell_size, main.grid.cell_size)) # Snap to grid
+	else:
+		if selected == true: double_click()
+		else: select()
+		
+	
+	
+	print("b")
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and pressed == true:
+		var motion = event as InputEventMouseMotion
+		
+		# Returns if event is small for human inperfections
+		if motion.relative.length_squared() <= selection_moviment_threshold and m_motion == false:
+			return
+		
+		if m_motion == false: m_motion = true # Mouse Motion
+		deselect_all()
+		
+		position += motion.relative / main.camera.zoom.x # Moves based on camera zoom
